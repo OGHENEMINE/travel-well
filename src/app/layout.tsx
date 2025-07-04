@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/layout/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
+import { Toaster } from "sonner";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -25,14 +27,17 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} antialiased grid grid-rows-[auto_1fr_auto] min-h-screen bg-neutral-100 text-muted`}
       >
-        <Navbar />
-        <div className="max-w-7xl w-full mx-auto flex py-10 gap-16">
-          <Sidebar/>
-          {children}
+        <ReactQueryProvider>
+          <Navbar />
+          <div className="max-w-7xl w-full mx-auto flex py-10 gap-16">
+            <Sidebar/>
+            {children}
           </div>
-        <footer className="text-center font-bold">
-          Travel well &copy; 2025. All rights reserved.{" "}
-        </footer>
+          <footer className="text-center font-bold">
+            Travel well &copy; 2025. All rights reserved.{" "}
+          </footer>
+          <Toaster position="top-right" richColors />
+        </ReactQueryProvider>
       </body>
     </html>
   );

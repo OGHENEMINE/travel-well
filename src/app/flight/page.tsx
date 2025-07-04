@@ -2,13 +2,15 @@
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import AirportComboBox from "@/components/common/AirportComboBox";
 import DateRangePicker from "@/components/common/DateRangePicker";
 import TravelClassSelector from "@/components/common/TravelClassSelector";
 import { Button } from "@/components/ui/button";
 import FlightCard from "@/components/common/FlightCard";
 import { Airport } from "@/components/common/AirportComboBox";
-import { searchFlight } from "./action";
+import { searchFlightApi } from "@/api/flightApi";
+import { useMutation } from "@tanstack/react-query";
 
 interface FlightFormData {
   origin?: Airport;
@@ -26,38 +28,42 @@ const Flight = () => {
     passengers: 1,
     travelClass: "Economy",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const mutation = useMutation({
+    mutationFn: (params: {
+      fromId: string;
+      toId: string;
+      cabinClass: string;
+    }) =>
+      searchFlightApi({
+        fromId: params.fromId,
+        toId: params.toId,
+        cabinClass: params.cabinClass,
+      }),
+    onSuccess: (response) => {
+      console.log("Search results:", response.data);
+      toast.success("Flight search successful! Check console for results.");
+    },
+    onError: (error) => {
+      console.error("Error searching flights:", error);
+      toast.error("Failed to search flights. Please try again.");
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate form data
     if (
       !formData.origin ||
       !formData.destination ||
       !formData.dateRange?.from
     ) {
-      setError("Please fill in all required fields");
+      toast.error("Please fill in all required fields");
       return;
     }
-
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-
-    try {
-      
-      const response = await searchFlight(formData.origin.id, formData.destination.id, formData.travelClass);
-      console.log("Search results:", response.data);
-      setSuccess(true);
-    } catch (error) {
-      console.error("Error searching flights:", error);
-      setError("Failed to search flights. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate({
+      fromId: formData.origin.id,
+      toId: formData.destination.id,
+      cabinClass: formData.travelClass,
+    });
   };
 
   const swapAirports = () => {
@@ -69,7 +75,7 @@ const Flight = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="bg-white shadow rounded-md w-full h-fit p-6">
         <h2 className="text-xl text-black font-semibold mb-5">Flight Search</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -125,23 +131,46 @@ const Flight = () => {
             </div>
           </div>
 
-          {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-md">{error}</div>
-          )}
-
-          {success && (
-            <div className="bg-green-50 text-green-600 p-3 rounded-md">
-              Flight search successful! Check console for results.
-            </div>
-          )}
-
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Searching..." : "Search Flights"}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Searching..." : "Search Flights"}
           </Button>
         </form>
       </div>
       <div className="mt-6">
-        <FlightCard />
+        {mutation.data &&
+          Array.isArray(mutation.data.data.flightOffers) &&
+          mutation.data.data.flightOffers.map((flight: any) => {
+            // Extract airline name (first carrier in first segment)
+            const firstSegment = flight.segments?.[0];
+            const lastSegment = flight.segments?.[flight.segments.length - 1];
+            const airline =
+              firstSegment?.carriersData?.[0]?.name || "Unknown Airline";
+            // Price: use total price (units + nanos)
+            const priceObj = flight.priceBreakdown?.total;
+            const price = priceObj ? priceObj.units + priceObj.nanos / 1e9 : 0;
+            // Flight class: from first leg's cabinClass
+            const flightClass =
+              firstSegment?.legs?.[0]?.cabinClass || "Economy";
+            // Departure: from first segment's departureTime
+            const departure = firstSegment?.departureTime;
+            // Return: from last segment's arrivalTime (for roundtrip)
+            const returnDate = lastSegment?.arrivalTime;
+            return (
+              <FlightCard
+                key={flight.token}
+                airline={airline}
+                price={price}
+                flightClass={flightClass}
+                buttonType="add"
+                departure={departure}
+                returnDate={returnDate}
+              />
+            );
+          })}
       </div>
     </div>
   );

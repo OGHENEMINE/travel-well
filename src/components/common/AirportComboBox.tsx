@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { MapPinIcon } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { searchLocation } from "@/app/flight/action";
+import { searchLocationApi } from "@/api/flightApi";
+import { toast } from "sonner";
 
 export interface Airport {
   id: string;
@@ -44,13 +46,13 @@ const AirportComboBox = ({
 }: AirportComboBoxProps) => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [airports, setAirports] = useState<Airport[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Debounce search term
   useEffect(() => {
     if (searchTerm.length < 2) {
-      setAirports([]);
+      setDebouncedSearchTerm("");
       return;
     }
 
@@ -60,18 +62,9 @@ const AirportComboBox = ({
     }
 
     // Set a new timeout to debounce the search
-    searchTimeoutRef.current = setTimeout(async () => {
-      setLoading(true);
-      try {
-        const response = await searchLocation(searchTerm);
-        console.log(response.data);
-        setAirports(response.data);
-      } catch (error) {
-        console.error("Error fetching airports:", error);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
 
     return () => {
       if (searchTimeoutRef.current) {
@@ -80,7 +73,22 @@ const AirportComboBox = ({
     };
   }, [searchTerm]);
 
-  console.log("airp",airports)
+  // Use React Query to fetch airports
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['airports', debouncedSearchTerm],
+    queryFn: () => searchLocationApi(debouncedSearchTerm),
+    enabled: debouncedSearchTerm.length >= 2,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Show error toast if query fails
+  useEffect(() => {
+    if (isError) {
+      toast.error("Error fetching airports");
+    }
+  }, [isError]);
+
+  const airports = data?.data || [];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -115,15 +123,15 @@ const AirportComboBox = ({
             onValueChange={setSearchTerm}
           />
           <CommandList>
-            {loading && (
+            {isLoading && (
               <div className="py-6 text-center text-sm">Loading...</div>
             )}
-            {!loading && airports.length === 0 && searchTerm.length >= 2 && (
+            {!isLoading && airports.length === 0 && debouncedSearchTerm.length >= 2 && (
               <CommandEmpty>No airports found.</CommandEmpty>
             )}
-            {!loading && airports.length > 0 && (
+            {!isLoading && airports.length > 0 && (
               <CommandGroup>
-                {airports?.map((airport) => (
+                {airports.map((airport) => (
                   <CommandItem
                     key={airport.id}
                     value={airport.code}

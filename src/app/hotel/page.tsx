@@ -3,6 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { DateRange } from "react-day-picker";
 import axios from "axios";
+import { toast } from "sonner";
 import Sidebar from "@/components/layout/Sidebar";
 import CityComboBox from "@/components/common/CityComboBox";
 import DateRangePicker from "@/components/common/DateRangePicker";
@@ -31,30 +32,25 @@ const Hotel = () => {
     roomType: "Standard",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form data
     if (!formData.destination || !formData.dateRange?.from) {
-      setError("Please fill in all required fields");
+      toast.error("Please fill in all required fields");
       return;
     }
 
     setLoading(true);
-    setError(null);
-    setSuccess(false);
 
     try {
-      // This is a mock API call - replace with your actual API endpoint
       const response = await axios.post("/api/hotel-search", formData);
       console.log("Search results:", response.data);
-      setSuccess(true);
+      toast.success("Hotel search successful! Check console for results.");
     } catch (error) {
       console.error("Error searching hotels:", error);
-      setError("Failed to search hotels. Please try again.");
+      toast.error("Failed to search hotels. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -100,18 +96,6 @@ const Hotel = () => {
               />
             </div>
           </div>
-
-          {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-md">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="bg-green-50 text-green-600 p-3 rounded-md">
-              Hotel search successful! Check console for results.
-            </div>
-          )}
 
           <Button 
             type="submit" 
