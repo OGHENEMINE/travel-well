@@ -3,11 +3,13 @@ import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import axios from "axios";
 import Sidebar from "@/components/layout/Sidebar";
-import { ArrowsLeftRightIcon } from "@phosphor-icons/react";
+import { ArrowsLeftRightIcon, MapPinIcon } from "@phosphor-icons/react";
 import AirportComboBox from "@/components/common/AirportComboBox";
 import DateRangePicker from "@/components/common/DateRangePicker";
 import TravelClassSelector from "@/components/common/TravelClassSelector";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import DatePicker from "@/components/common/DatePicker";
 
 interface Airport {
   code: string;
