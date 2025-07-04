@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+import Navbar from "../components/layout/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["200", "400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -25,9 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} antialiased grid grid-rows-[auto_1fr_auto] min-h-screen bg-neutral-100 text-muted`}
       >
-        {children}
+        <Navbar />
+        <div className="max-w-7xl w-full mx-auto">{children}</div>
+        <footer className="text-center font-bold">
+          Travel well &copy; 2025. All rights reserved.{" "}
+        </footer>
       </body>
     </html>
   );
