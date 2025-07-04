@@ -43,7 +43,7 @@ const Navbar = () => {
           <div className="flex max-sm:flex-col md:items-center gap-6 md:pr-5">
             <Link
               href="/"
-              className={`flex md:flex-col gap-2 items-center text-sm font-medium ${
+              className={`flex md:flex-col gap-2 items-center text-sm font-medium hover:text-black ${
                 PATH === "/" ? "text-foreground" : ""
               }`}
             >
@@ -54,7 +54,7 @@ const Navbar = () => {
             </Link>
             <Link
               href="#"
-              className={`flex md:flex-col gap-2 items-center text-sm font-medium ${
+              className={`flex md:flex-col gap-2 items-center text-sm font-medium hover:text-black ${
                 PATH === "/dashboard" ? "text-foreground" : ""
               }`}
             >
@@ -65,7 +65,7 @@ const Navbar = () => {
             </Link>
             <Link
               href="#"
-              className={`flex md:flex-col gap-2 items-center text-sm font-medium ${
+              className={`flex md:flex-col gap-2 items-center text-sm font-medium hover:text-black ${
                 PATH === "/wallet" ? "text-foreground" : ""
               }`}
             >
@@ -74,7 +74,7 @@ const Navbar = () => {
             </Link>
             <Link
               href="/"
-              className={`flex md:flex-col gap-2 items-center text-sm font-medium ${
+              className={`flex md:flex-col gap-2 items-center text-sm font-medium hover:text-black ${
                 PATH === "/" ? "text-foreground" : ""
               }`}
             >
@@ -85,7 +85,7 @@ const Navbar = () => {
             </Link>
             <Link
               href="#"
-              className={`flex md:flex-col gap-2 items-center text-sm font-medium ${
+              className={`flex md:flex-col gap-2 items-center text-sm font-medium hover:text-black ${
                 PATH === "/commission" ? "text-foreground" : ""
               }`}
             >
@@ -126,7 +126,7 @@ const Navbar = () => {
               </span>
               <span>create</span>
             </Link>
-            <Link href="#"></Link>
+            
           </ul>
         </div>
       </div>

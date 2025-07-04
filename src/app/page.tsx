@@ -108,7 +108,7 @@ const Home = () => {
               Add Flights
             </Link>
           </div>
-          <FlightCard />
+          <FlightCard  />
         </div>
 
         {/* HOTEL INFO */}
