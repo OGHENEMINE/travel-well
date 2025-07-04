@@ -21,10 +21,7 @@ interface DateRangePickerProps {
 }
 
 export function DateRangePicker({ className, onSelect }: DateRangePickerProps) {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 7),
-  });
+  const [date, setDate] = useState<DateRange | undefined>();
   const [open, setOpen] = useState(false);
 
   const handleSelect = (selectedDateRange: DateRange | undefined) => {

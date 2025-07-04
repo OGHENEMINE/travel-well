@@ -84,11 +84,13 @@ const Hotel = () => {
   };
 
   return (
-    <div className="bg-white shadow rounded-md w-full h-fit p-6">
-      <h2 className="text-xl text-black font-semibold mb-5">Hotel Search</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <div className="bg-white shadow rounded-md w-full h-fit p-4 lg:p-6">
+      <h2 className="text-lg lg:text-xl text-black font-semibold mb-4 lg:mb-5">
+        Hotel Search
+      </h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 lg:gap-6">
         <div>
-          <p className="mb-2 font-medium">Destination:</p>
+          <p className="mb-2 font-medium text-sm lg:text-base">Destination:</p>
           <div className="flex items-center gap-2">
             <div className="flex-1">
               <CityComboBox
@@ -106,9 +108,11 @@ const Hotel = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2 font-medium">Check-in & Check-out:</p>
+            <p className="mb-2 font-medium text-sm lg:text-base">
+              Check-in & Check-out:
+            </p>
             <DateRangePicker
               onSelect={(dateRange) =>
                 setFormData((prev) => ({ ...prev, dateRange }))
@@ -116,7 +120,9 @@ const Hotel = () => {
             />
           </div>
           <div>
-            <p className="mb-2 font-medium">Guests & Room Type:</p>
+            <p className="mb-2 font-medium text-sm lg:text-base">
+              Guests & Room Type:
+            </p>
             <RoomTypeSelector
               onSelect={({ guests, roomType }) =>
                 setFormData((prev) => ({
@@ -129,37 +135,45 @@ const Hotel = () => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={mutation.isPending}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={
+            mutation.isPending || !formData.destination || !formData.dateRange
+          }
+        >
           {mutation.isPending ? "Searching..." : "Search Hotels"}
         </Button>
       </form>
-      {mutation.data &&
-        Array.isArray(mutation.data.data.hotels) &&
-        mutation.data.data.hotels.map((hotel: HotelProperty) => {
-          const p = hotel.property;
-          return (
-            <HotelCard
-              key={p.id}
-              name={p.name}
-              address={undefined}
-              images={p.photoUrls || []}
-              price={p.priceBreakdown?.grossPrice?.value || 0}
-              currency={p.priceBreakdown?.grossPrice?.currency || ""}
-              rating={p.reviewScore}
-              reviewCount={p.reviewCount}
-              roomType={undefined}
-              checkIn={p.checkinDate}
-              checkOut={p.checkoutDate}
-              buttonType={
-                savedHotels.some((h) => h.id === p.id.toString())
-                  ? "cancel"
-                  : "add"
-              }
-              onAdd={() => addHotel({ id: p.id.toString(), data: hotel })}
-              onRemove={() => removeHotel(p.id.toString())}
-            />
-          );
-        })}
+      <div className="mt-4 lg:mt-6 space-y-3">
+        {mutation.data &&
+          Array.isArray(mutation.data.data.hotels) &&
+          mutation.data.data.hotels.map((hotel: HotelProperty) => {
+            const p = hotel.property;
+            return (
+              <HotelCard
+                key={p.id}
+                name={p.name}
+                address={undefined}
+                images={p.photoUrls || []}
+                price={p.priceBreakdown?.grossPrice?.value || 0}
+                currency={p.priceBreakdown?.grossPrice?.currency || ""}
+                rating={p.reviewScore}
+                reviewCount={p.reviewCount}
+                roomType={undefined}
+                checkIn={p.checkinDate}
+                checkOut={p.checkoutDate}
+                buttonType={
+                  savedHotels.some((h) => h.id === p.id.toString())
+                    ? "cancel"
+                    : "add"
+                }
+                onAdd={() => addHotel({ id: p.id.toString(), data: hotel })}
+                onRemove={() => removeHotel(p.id.toString())}
+              />
+            );
+          })}
+      </div>
     </div>
   );
 };

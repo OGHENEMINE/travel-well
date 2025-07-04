@@ -29,11 +29,11 @@ export default function RootLayout({
       >
         <ReactQueryProvider>
           <Navbar />
-          <div className="max-w-7xl w-full mx-auto flex py-10 gap-16">
-            <Sidebar/>
-            {children}
+          <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-row py-4 lg:py-10 gap-4 lg:gap-16 px-4 lg:px-0">
+            <Sidebar />
+            <main className="flex-1 min-w-0">{children}</main>
           </div>
-          <footer className="text-center font-bold">
+          <footer className="text-center font-bold py-4 px-4">
             Travel well &copy; 2025. All rights reserved.{" "}
           </footer>
           <Toaster position="top-right" richColors />

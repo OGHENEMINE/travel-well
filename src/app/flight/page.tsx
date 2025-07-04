@@ -108,13 +108,17 @@ const Flight = () => {
 
   return (
     <div className="w-full">
-      <div className="bg-white shadow rounded-md w-full h-fit p-6">
-        <h2 className="text-xl text-black font-semibold mb-5">Flight Search</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <div className="bg-white shadow rounded-md w-full h-fit p-4 lg:p-6">
+        <h2 className="text-lg lg:text-xl text-black font-semibold mb-4 lg:mb-5">
+          Flight Search
+        </h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 lg:gap-6">
           <div>
-            <p className="mb-2 font-medium">Destination:</p>
-            <div className="flex items-center gap-2">
-              <div className="flex-1">
+            <p className="mb-2 font-medium text-sm lg:text-base">
+              Destination:
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <div className="flex-1 w-full">
                 <AirportComboBox
                   placeholder="From"
                   value={formData.origin}
@@ -128,11 +132,11 @@ const Flight = () => {
                 variant="ghost"
                 size="icon"
                 onClick={swapAirports}
-                className="rounded-full"
+                className="rounded-full self-center"
               >
-                <ArrowsLeftRightIcon size={24} />
+                <ArrowsLeftRightIcon size={20} className="lg:w-6 lg:h-6" />
               </Button>
-              <div className="flex-1">
+              <div className="flex-1 w-full">
                 <AirportComboBox
                   placeholder="To"
                   value={formData.destination}
@@ -144,9 +148,11 @@ const Flight = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
-              <p className="mb-2 font-medium">Departure & Return:</p>
+              <p className="mb-2 font-medium text-sm lg:text-base">
+                Departure & Return:
+              </p>
               <DateRangePicker
                 onSelect={(dateRange) =>
                   setFormData((prev) => ({ ...prev, dateRange }))
@@ -154,7 +160,9 @@ const Flight = () => {
               />
             </div>
             <div>
-              <p className="mb-2 font-medium">Passengers & Class:</p>
+              <p className="mb-2 font-medium text-sm lg:text-base">
+                Passengers & Class:
+              </p>
               <TravelClassSelector
                 onSelect={({ passengers, travelClass }) =>
                   setFormData((prev) => ({ ...prev, passengers, travelClass }))
@@ -178,7 +186,7 @@ const Flight = () => {
           </Button>
         </form>
       </div>
-      <div className="mt-6">
+      <div className="mt-4 lg:mt-6 space-y-3">
         {mutation.data &&
           Array.isArray(mutation.data.data.flightOffers) &&
           mutation.data.data.flightOffers.map((flight: FlightOffer) => {
