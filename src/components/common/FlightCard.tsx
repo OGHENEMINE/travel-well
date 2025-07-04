@@ -15,6 +15,17 @@ import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 
+interface FlightCardProps {
+  airline?: string;
+  price: number;
+  flightClass: string;
+  buttonType: string;
+  departure?: string;
+  returnDate?: string;
+  onAdd?: () => void;
+  onRemove?: () => void;
+}
+
 const FlightCard = ({
   airline = "American Airlines",
   price = 123450.0,
@@ -22,14 +33,9 @@ const FlightCard = ({
   buttonType = "cancel",
   departure,
   returnDate,
-}: {
-  airline?: string;
-  price: number;
-  flightClass: string;
-  buttonType: string;
-  departure?: string;
-  returnDate?: string;
-}) => {
+  onAdd,
+  onRemove,
+}: FlightCardProps) => {
   return (
     <Card className="w-full border-none shadow-none rounded-md p-0 mt-6">
       <CardContent className="p-0 flex items-stretch">
@@ -120,19 +126,16 @@ const FlightCard = ({
           </div>
         </div>
 
-        {/* CANCEL BUTTON */}
+        {/* CANCEL/ADD BUTTON */}
         <Button
           className={`h-auto w-10 rounded-none cursor-pointer ${
             buttonType === "add"
               ? "bg-primary text-white"
               : "text-destructive bg-destructive/10 hover:bg-destructive hover:text-white"
           }`}
+          onClick={buttonType === "add" ? onAdd : onRemove}
         >
-          {buttonType === "add" ? (
-            <PlusIcon size={32} />
-          ) : (
-            <X size={32} />
-          )}
+          {buttonType === "add" ? <PlusIcon size={32} /> : <X size={32} />}
         </Button>
       </CardContent>
     </Card>

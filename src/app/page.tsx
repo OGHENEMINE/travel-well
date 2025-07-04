@@ -13,128 +13,204 @@ import {
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSavedItemsStore } from "@/store/useSavedItemsStore";
 
 const Home = () => {
+  const savedFlights = useSavedItemsStore((s) => s.flights);
+  const savedHotels = useSavedItemsStore((s) => s.hotels);
+
   return (
-     <div className="flex-1 bg-white rounded-md p-8">
-        {/* BANNER */}
-        <div className="relative w-full h-[150px] aspect-square  rounded-md">
-          <Image
-            src="/banner.png"
-            fill
-            alt="banner image"
-            className="absolute w-full h-full"
-          />
+    <div className="flex-1 bg-white rounded-md p-8">
+      {/* BANNER */}
+      <div className="relative w-full h-[150px] aspect-square  rounded-md">
+        <Image
+          src="/banner.png"
+          fill
+          alt="banner image"
+          className="absolute w-full h-full"
+        />
+      </div>
+
+      {/* TRIP INFO */}
+      <div>
+        {/* TRIP TIMELINE */}
+        <div className="flex w-fit items-center text-sm gap-1 font-bold mt-5 py-2 px-3 bg-[#fef4e6] text-[#7a4504]">
+          <span>
+            <CalendarBlankIcon size={20} />
+          </span>
+          <span>21 March 2024</span>
+          <span>
+            <ArrowRight size={20} />
+          </span>
+          <span>21 April 2024</span>
         </div>
 
-        {/* TRIP INFO */}
-        <div>
-          {/* TRIP TIMELINE */}
-          <div className="flex w-fit items-center text-sm gap-1 font-bold mt-5 py-2 px-3 bg-[#fef4e6] text-[#7a4504]">
-            <span>
-              <CalendarBlankIcon size={20} />
-            </span>
-            <span>21 March 2024</span>
-            <span>
-              <ArrowRight size={20} />
-            </span>
-            <span>21 April 2024</span>
-          </div>
+        {/* TRIP NAME */}
+        <h2 className="font-semibold text-2xl py-2 text-black">
+          Bahamas Family Trip
+        </h2>
 
-          {/* TRIP NAME */}
-          <h2 className="font-semibold text-2xl py-2 text-black">
-            Bahamas Family Trip
-          </h2>
+        {/* TRIP LOCATION / TYPE */}
+        <p className="flex items-center divide-x-2 divide-neutral-300 font-medium">
+          <span className="pr-2">New York, United States of America</span>
+          <span className="pl-2">Solo Trip</span>
+        </p>
+      </div>
 
-          {/* TRIP LOCATION / TYPE */}
-          <p className="flex items-center divide-x-2 divide-neutral-300 font-medium">
-            <span className="pr-2">New York,  United States of America</span>
-            <span className="pl-2">Solo Trip</span>
-          </p>
-        </div>
-
-        {/* TRIP PLANNER */}
-        <div className="flex items-center gap-1 mt-5">
-          <Card className="shadow-none border-none text-lg bg-[#000031] text-white p-5 rounded-md">
-            <CardTitle className="font-semibold">Activities</CardTitle>
-            <CardContent className="p-0">
-              Build, personalize, and optimize your itineraries with our trip
-              planner.
-            </CardContent>
-            <CardFooter className="p-0">
-              <Link href="/flight" className="bg-primary w-full p-2 rounded-md text-center text-sm font-medium">Add Activities</Link>
-            </CardFooter>
-          </Card>
-          <Card className="shadow-none border-none text-lg bg-[#e7f0ff] text-black p-5 rounded-md">
-            <CardTitle className="font-semibold">Hotels</CardTitle>
-            <CardContent className="p-0">
-              Build, personalize, and optimize your itineraries with our trip
-              planner.
-            </CardContent>
-            <CardFooter className="p-0">
-              <Link href="/hotel" className="bg-primary text-white w-full p-2 rounded-md text-center text-sm font-medium">Add Hotels</Link>
-            </CardFooter>
-          </Card>
-          <Card className="shadow-none border-none text-lg bg-primary text-white p-5 rounded-md">
-            <CardTitle className="font-semibold">Flights</CardTitle>
-            <CardContent className="p-0">
-              Build, personalize, and optimize your itineraries with our trip
-              planner.
-            </CardContent>
-            <CardFooter className="p-0">
-              <Link href="/flight" className="bg-white w-full text-primary p-2 rounded-md text-center text-sm font-medium">
-                Add Flights
-              </Link>
-            </CardFooter>
-          </Card>
-        </div>
-
-        {/* TRIP ITINERY INFO */}
-        <div className="space-y-1 mt-24">
-          <p className="font-bold text-lg text-black">Trip itineraries</p>
-          <p>Your trip itineraries are placed here</p>
-        </div>
-
-        {/* Flight Info */}
-        <div className="text-black bg-neutral-100 mt-7 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <p className="font-medium flex items-center gap-1">
-              <span>
-                <AirplaneInFlightIcon size={24} />
-              </span>
-              Flights
-            </p>
-            <Link href="/flight" className="text-primary bg-white font-medium hover:bg-primary hover:text-white cursor-pointer p-2 rounded-md text-sm">
+      {/* TRIP PLANNER */}
+      <div className="flex items-center gap-1 mt-5">
+        <Card className="shadow-none border-none text-lg bg-[#000031] text-white p-5 rounded-md">
+          <CardTitle className="font-semibold">Activities</CardTitle>
+          <CardContent className="p-0">
+            Build, personalize, and optimize your itineraries with our trip
+            planner.
+          </CardContent>
+          <CardFooter className="p-0">
+            <Link
+              href="/flight"
+              className="bg-primary w-full p-2 rounded-md text-center text-sm font-medium"
+            >
+              Add Activities
+            </Link>
+          </CardFooter>
+        </Card>
+        <Card className="shadow-none border-none text-lg bg-[#e7f0ff] text-black p-5 rounded-md">
+          <CardTitle className="font-semibold">Hotels</CardTitle>
+          <CardContent className="p-0">
+            Build, personalize, and optimize your itineraries with our trip
+            planner.
+          </CardContent>
+          <CardFooter className="p-0">
+            <Link
+              href="/hotel"
+              className="bg-primary text-white w-full p-2 rounded-md text-center text-sm font-medium"
+            >
+              Add Hotels
+            </Link>
+          </CardFooter>
+        </Card>
+        <Card className="shadow-none border-none text-lg bg-primary text-white p-5 rounded-md">
+          <CardTitle className="font-semibold">Flights</CardTitle>
+          <CardContent className="p-0">
+            Build, personalize, and optimize your itineraries with our trip
+            planner.
+          </CardContent>
+          <CardFooter className="p-0">
+            <Link
+              href="/flight"
+              className="bg-white w-full text-primary p-2 rounded-md text-center text-sm font-medium"
+            >
               Add Flights
             </Link>
-          </div>
-          <FlightCard  />
-        </div>
-
-        {/* HOTEL INFO */}
-        <div className="bg-[#344054] px-6 py-4 mt-4">
-          <div className="flex items-center justify-between">
-            <p className="text-white font-bold flex items-center gap-1">
-              <WarehouseIcon size={24} />
-              <span>Hotels</span>
-            </p>
-            <Link href="/hotel" className="bg-white p-2 rounded-md text-[#344054] text-sm font-medium">Add Hotels</Link>
-          </div>
-          <HotelCard />
-        </div>
-
-        {/* ACTIVITIES INFO */}
-        <div className="bg-primary px-6 py-4 mt-4">
-          <div className="flex items-center justify-between">
-            <p className="text-white font-bold flex items-center gap-1">
-              <RoadHorizonIcon size={32} />
-              <span>Activities</span>
-            </p>
-            <Button className="bg-white text-primary hover:bg-white">Add Activities</Button>
-          </div>
-          <ActivitiesCard />
-        </div>
+          </CardFooter>
+        </Card>
       </div>
+
+      {/* TRIP ITINERY INFO */}
+      <div className="space-y-1 mt-24">
+        <p className="font-bold text-lg text-black">Trip itineraries</p>
+        <p>Your trip itineraries are placed here</p>
+      </div>
+
+      {/* Flight Info */}
+      <div className="text-black bg-neutral-100 mt-7 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <p className="font-medium flex items-center gap-1">
+            <span>
+              <AirplaneInFlightIcon size={24} />
+            </span>
+            Flights
+          </p>
+          <Link
+            href="/flight"
+            className="text-primary bg-white font-medium hover:bg-primary hover:text-white cursor-pointer p-2 rounded-md text-sm"
+          >
+            Add Flights
+          </Link>
+        </div>
+        {savedFlights.length === 0 && (
+          <p className="text-gray-500 mb-8">No saved flights.</p>
+        )}
+        {savedFlights.map((f) => {
+          const flight = f.data;
+          const firstSegment = flight.segments?.[0];
+          const lastSegment = flight.segments?.[flight.segments.length - 1];
+          const airline =
+            firstSegment?.carriersData?.[0]?.name || "Unknown Airline";
+          const priceObj = flight.priceBreakdown?.total;
+          const price = priceObj ? priceObj.units + priceObj.nanos / 1e9 : 0;
+          const flightClass = firstSegment?.legs?.[0]?.cabinClass || "Economy";
+          const departure = firstSegment?.departureTime;
+          const returnDate = lastSegment?.arrivalTime;
+          return (
+            <FlightCard
+              key={f.id}
+              airline={airline}
+              price={price}
+              flightClass={flightClass}
+              buttonType="cancel"
+              departure={departure}
+              returnDate={returnDate}
+              onRemove={() => useSavedItemsStore.getState().removeFlight(f.id)}
+            />
+          );
+        })}
+      </div>
+
+      {/* HOTEL INFO */}
+      <div className="bg-[#344054] px-6 py-4 mt-4">
+        <div className="flex items-center justify-between">
+          <p className="text-white font-bold flex items-center gap-1">
+            <WarehouseIcon size={24} />
+            <span>Hotels</span>
+          </p>
+          <Link
+            href="/hotel"
+            className="bg-white p-2 rounded-md text-[#344054] text-sm font-medium"
+          >
+            Add Hotels
+          </Link>
+        </div>
+        {savedHotels.length === 0 && (
+          <p className="text-gray-500">No saved hotels.</p>
+        )}
+        {savedHotels.map((h) => {
+          const hotel = h.data;
+          const p = hotel.property;
+          return (
+            <HotelCard
+              key={h.id}
+              name={p.name}
+              address={undefined}
+              images={p.photoUrls || []}
+              price={p.priceBreakdown?.grossPrice?.value || 0}
+              currency={p.priceBreakdown?.grossPrice?.currency || ""}
+              rating={p.reviewScore}
+              reviewCount={p.reviewCount}
+              roomType={undefined}
+              checkIn={p.checkinDate}
+              checkOut={p.checkoutDate}
+              buttonType="cancel"
+              onRemove={() => useSavedItemsStore.getState().removeHotel(h.id)}
+            />
+          );
+        })}
+      </div>
+
+      {/* ACTIVITIES INFO */}
+      <div className="bg-primary px-6 py-4 mt-4">
+        <div className="flex items-center justify-between">
+          <p className="text-white font-bold flex items-center gap-1">
+            <RoadHorizonIcon size={32} />
+            <span>Activities</span>
+          </p>
+          <Button className="bg-white text-primary hover:bg-white">
+            Add Activities
+          </Button>
+        </div>
+        <ActivitiesCard />
+      </div>
+    </div>
   );
 };
 

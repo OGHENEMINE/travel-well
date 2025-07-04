@@ -11,6 +11,8 @@ import FlightCard from "@/components/common/FlightCard";
 import { Airport } from "@/components/common/AirportComboBox";
 import { searchFlightApi } from "@/api/flightApi";
 import { useMutation } from "@tanstack/react-query";
+import { useSavedItemsStore } from "@/store/useSavedItemsStore";
+import { format } from "date-fns";
 
 interface FlightFormData {
   origin?: Airport;
@@ -18,6 +20,22 @@ interface FlightFormData {
   dateRange?: DateRange;
   passengers: number;
   travelClass: string;
+}
+
+interface FlightOffer {
+  token: string;
+  segments?: Array<{
+    carriersData?: Array<{ name: string }>;
+    legs?: Array<{ cabinClass: string }>;
+    departureTime?: string;
+    arrivalTime?: string;
+  }>;
+  priceBreakdown?: {
+    total?: {
+      units: number;
+      nanos: number;
+    };
+  };
 }
 
 const Flight = () => {
@@ -33,11 +51,15 @@ const Flight = () => {
       fromId: string;
       toId: string;
       cabinClass: string;
+      departDate: Date | string;
+      returnDate: Date | string;
     }) =>
       searchFlightApi({
         fromId: params.fromId,
         toId: params.toId,
         cabinClass: params.cabinClass,
+        departDate: params.departDate,
+        returnDate: params.returnDate,
       }),
     onSuccess: (response) => {
       console.log("Search results:", response.data);
@@ -49,21 +71,29 @@ const Flight = () => {
     },
   });
 
+  const addFlight = useSavedItemsStore((s) => s.addFlight);
+  const removeFlight = useSavedItemsStore((s) => s.removeFlight);
+  const savedFlights = useSavedItemsStore((s) => s.flights);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (
       !formData.origin ||
       !formData.destination ||
-      !formData.dateRange?.from
+      !formData.dateRange?.from ||
+      !formData.dateRange?.to
     ) {
       toast.error("Please fill in all required fields");
       return;
+    } else {
+      mutation.mutate({
+        fromId: formData.origin.id,
+        toId: formData.destination.id,
+        cabinClass: formData.travelClass,
+        departDate: format(formData.dateRange.from, "yyyy-MM-dd"),
+        returnDate: format(formData.dateRange.to, "yyyy-MM-dd"),
+      });
     }
-    mutation.mutate({
-      fromId: formData.origin.id,
-      toId: formData.destination.id,
-      cabinClass: formData.travelClass,
-    });
   };
 
   const swapAirports = () => {
@@ -73,6 +103,8 @@ const Flight = () => {
       destination: prev.origin,
     }));
   };
+
+  console.log("form-data", formData);
 
   return (
     <div className="w-full">
@@ -134,7 +166,13 @@ const Flight = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={mutation.isPending}
+            disabled={
+              mutation.isPending ||
+              !formData.origin ||
+              !formData.destination ||
+              !formData.dateRange?.from ||
+              !formData.dateRange?.to
+            }
           >
             {mutation.isPending ? "Searching..." : "Search Flights"}
           </Button>
@@ -143,7 +181,7 @@ const Flight = () => {
       <div className="mt-6">
         {mutation.data &&
           Array.isArray(mutation.data.data.flightOffers) &&
-          mutation.data.data.flightOffers.map((flight: any) => {
+          mutation.data.data.flightOffers.map((flight: FlightOffer) => {
             // Extract airline name (first carrier in first segment)
             const firstSegment = flight.segments?.[0];
             const lastSegment = flight.segments?.[flight.segments.length - 1];
@@ -165,9 +203,15 @@ const Flight = () => {
                 airline={airline}
                 price={price}
                 flightClass={flightClass}
-                buttonType="add"
+                buttonType={
+                  savedFlights.some((f) => f.id === flight.token)
+                    ? "cancel"
+                    : "add"
+                }
                 departure={departure}
                 returnDate={returnDate}
+                onAdd={() => addFlight({ id: flight.token, data: flight })}
+                onRemove={() => removeFlight(flight.token)}
               />
             );
           })}
