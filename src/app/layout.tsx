@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/layout/Navbar";
+import Sidebar from "@/components/layout/Sidebar";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -25,7 +26,10 @@ export default function RootLayout({
         className={`${poppins.variable} antialiased grid grid-rows-[auto_1fr_auto] min-h-screen bg-neutral-100 text-muted`}
       >
         <Navbar />
-        <div className="max-w-7xl w-full mx-auto">{children}</div>
+        <div className="max-w-7xl w-full mx-auto flex py-10 gap-16">
+          <Sidebar/>
+          {children}
+          </div>
         <footer className="text-center font-bold">
           Travel well &copy; 2025. All rights reserved.{" "}
         </footer>
