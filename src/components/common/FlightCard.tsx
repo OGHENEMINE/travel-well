@@ -19,7 +19,7 @@ const FlightCard = ({
   airline = "American Airlines",
   price = 123450.0,
   flightClass = "First class",
-  buttonType = "add",
+  buttonType = "cancel",
   departure,
   returnDate,
 }: {

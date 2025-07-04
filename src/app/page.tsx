@@ -104,7 +104,7 @@ const Home = () => {
               </span>
               Flights
             </p>
-            <Link href="/flight" className="text-primary bg-white font-bold hover:bg-primary hover:text-white cursor-pointer p-2 rounded-md text-sm">
+            <Link href="/flight" className="text-primary bg-white font-medium hover:bg-primary hover:text-white cursor-pointer p-2 rounded-md text-sm">
               Add Flights
             </Link>
           </div>
@@ -118,7 +118,7 @@ const Home = () => {
               <WarehouseIcon size={24} />
               <span>Hotels</span>
             </p>
-            <Link href="/hotel">Add Hotels</Link>
+            <Link href="/hotel" className="bg-white p-2 rounded-md text-[#344054] text-sm font-medium">Add Hotels</Link>
           </div>
           <HotelCard />
         </div>
