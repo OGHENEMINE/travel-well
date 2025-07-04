@@ -2,7 +2,6 @@
 import ActivitiesCard from "@/components/common/ActivitiesCard";
 import FlightCard from "@/components/common/FlightCard";
 import HotelCard from "@/components/common/HotelCard";
-import Sidebar from "@/components/layout/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
@@ -17,10 +16,7 @@ import Link from "next/link";
 
 const Home = () => {
   return (
-    <div className="flex py-10 gap-16">
-      <Sidebar />
-
-      <div className="flex-1 bg-white rounded-md p-8">
+     <div className="flex-1 bg-white rounded-md p-8">
         {/* BANNER */}
         <div className="relative w-full h-[150px] aspect-square  rounded-md">
           <Image
@@ -66,7 +62,7 @@ const Home = () => {
               planner.
             </CardContent>
             <CardFooter className="p-0">
-              <Button className="w-full">Add Activities</Button>
+              <Link href="/flight" className="bg-primary w-full p-2 rounded-md text-center text-sm font-medium">Add Activities</Link>
             </CardFooter>
           </Card>
           <Card className="shadow-none border-none text-lg bg-[#e7f0ff] text-black p-5 rounded-md">
@@ -76,7 +72,7 @@ const Home = () => {
               planner.
             </CardContent>
             <CardFooter className="p-0">
-              <Button className="w-full">Add Hotels</Button>
+              <Link href="/hotel" className="bg-primary text-white w-full p-2 rounded-md text-center text-sm font-medium">Add Hotels</Link>
             </CardFooter>
           </Card>
           <Card className="shadow-none border-none text-lg bg-primary text-white p-5 rounded-md">
@@ -86,9 +82,9 @@ const Home = () => {
               planner.
             </CardContent>
             <CardFooter className="p-0">
-              <Button className="bg-white w-full text-primary">
+              <Link href="/flight" className="bg-white w-full text-primary p-2 rounded-md text-center text-sm font-medium">
                 Add Flights
-              </Button>
+              </Link>
             </CardFooter>
           </Card>
         </div>
@@ -108,7 +104,7 @@ const Home = () => {
               </span>
               Flights
             </p>
-            <Link href="/flight" className="text-primary bg-white font-bold hover:bg-primary hover:text-white cursor-pointer p-3 rounded-md text-sm">
+            <Link href="/flight" className="text-primary bg-white font-bold hover:bg-primary hover:text-white cursor-pointer p-2 rounded-md text-sm">
               Add Flights
             </Link>
           </div>
@@ -122,7 +118,7 @@ const Home = () => {
               <WarehouseIcon size={24} />
               <span>Hotels</span>
             </p>
-            <Button>Add Hotels</Button>
+            <Link href="/hotel">Add Hotels</Link>
           </div>
           <HotelCard />
         </div>
@@ -139,7 +135,6 @@ const Home = () => {
           <ActivitiesCard />
         </div>
       </div>
-    </div>
   );
 };
 
