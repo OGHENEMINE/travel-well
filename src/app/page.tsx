@@ -213,15 +213,15 @@ const Home = () => {
       </div>
 
       {/* ACTIVITIES INFO */}
-      <div className="bg-[#fef4e6] px-4 sm:px-6 py-4 mt-4 rounded-md">
+      <div className="bg-primary px-4 sm:px-6 py-4 mt-4 rounded-md">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p className="text-[#7a4504] font-bold flex items-center gap-1">
+          <p className="text-white font-bold flex items-center gap-1">
             <RoadHorizonIcon size={20} className="sm:w-6 sm:h-6" />
             <span>Activities</span>
           </p>
           <Link
             href="/activities"
-            className="bg-[#7a4504] text-white p-2 rounded-md text-xs sm:text-sm font-medium self-start sm:self-auto"
+            className="bg-white text-primary p-2 rounded-md text-xs sm:text-sm font-medium self-start sm:self-auto"
           >
             Add Activities
           </Link>
