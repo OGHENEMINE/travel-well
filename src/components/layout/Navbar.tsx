@@ -105,10 +105,10 @@ const Navbar = () => {
 
             {/* RIGHT SIDE */}
             <ul className="flex items-center gap-6 pl-5">
-              <Button className="bg-blue-400">Subscribe</Button>
+              <Button className="bg-primary cursor-pointer">Subscribe</Button>
               <Link
                 href="#"
-                className="text-sm flex flex-col gap-2 items-center font-medium"
+                className="text-sm flex flex-col gap-2 items-center font-medium hover:text-black hover:cursor-pointer"
               >
                 <span>
                   <BellIcon size={32} />
@@ -117,7 +117,7 @@ const Navbar = () => {
               </Link>
               <Link
                 href="#"
-                className="text-sm flex flex-col gap-2 items-center font-medium"
+                className="text-sm flex flex-col gap-2 items-center font-medium hover:text-black hover:cursor-pointer"
               >
                 <span>
                   <BasketIcon size={32} />
@@ -126,7 +126,7 @@ const Navbar = () => {
               </Link>
               <Link
                 href="#"
-                className="text-sm flex flex-col gap-2 items-center font-medium"
+                className="text-sm flex flex-col gap-2 items-center font-medium hover:text-black hover:cursor-pointer"
               >
                 <span>
                   <PlusSquareIcon size={32} />
