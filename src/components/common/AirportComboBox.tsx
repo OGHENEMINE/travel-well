@@ -1,8 +1,6 @@
 "use client";
 
-import * as React from "react";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { MapPinIcon } from "@phosphor-icons/react";
 
@@ -21,10 +19,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { searchLocation } from "@/app/flight/action";
 
-interface Airport {
+export interface Airport {
+  id: string;
+  photoUri: string;
+  regionName: string;
   code: string;
-  name: string;
+  countryName: string;
   city: string;
   country: string;
 }
@@ -61,23 +63,11 @@ const AirportComboBox = ({
     searchTimeoutRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        // This is a mock API call - replace with your actual API endpoint
-        const response = await axios.get(`/api/airports?search=${searchTerm}`);
+        const response = await searchLocation(searchTerm);
+        console.log(response.data);
         setAirports(response.data);
       } catch (error) {
         console.error("Error fetching airports:", error);
-        // For demo purposes, provide some mock data
-        setAirports([
-          { code: "LHR", name: "Heathrow Airport", city: "London", country: "United Kingdom" },
-          { code: "JFK", name: "John F. Kennedy International Airport", city: "New York", country: "United States" },
-          { code: "CDG", name: "Charles de Gaulle Airport", city: "Paris", country: "France" },
-          { code: "DXB", name: "Dubai International Airport", city: "Dubai", country: "United Arab Emirates" },
-          { code: "SYD", name: "Sydney Airport", city: "Sydney", country: "Australia" },
-        ].filter(airport => 
-          airport.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          airport.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          airport.code.toLowerCase().includes(searchTerm.toLowerCase())
-        ));
       } finally {
         setLoading(false);
       }
@@ -89,6 +79,8 @@ const AirportComboBox = ({
       }
     };
   }, [searchTerm]);
+
+  console.log("airp",airports)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -104,7 +96,9 @@ const AirportComboBox = ({
             {value ? (
               <div className="flex flex-col items-start">
                 <span className="font-medium">{value.city}</span>
-                <span className="text-xs text-muted-foreground">{value.code} - {value.name}</span>
+                <span className="text-xs text-muted-foreground">
+                  {value.code} - {value.regionName}
+                </span>
               </div>
             ) : (
               <span>{placeholder}</span>
@@ -115,8 +109,8 @@ const AirportComboBox = ({
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput 
-            placeholder="Search airport..." 
+          <CommandInput
+            placeholder="Search airport..."
             value={searchTerm}
             onValueChange={setSearchTerm}
           />
@@ -129,9 +123,9 @@ const AirportComboBox = ({
             )}
             {!loading && airports.length > 0 && (
               <CommandGroup>
-                {airports.map((airport) => (
+                {airports?.map((airport) => (
                   <CommandItem
-                    key={airport.code}
+                    key={airport.id}
                     value={airport.code}
                     onSelect={() => {
                       onSelect(airport);
@@ -141,12 +135,18 @@ const AirportComboBox = ({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value?.code === airport.code ? "opacity-100" : "opacity-0"
+                        value?.code === airport.code
+                          ? "opacity-100"
+                          : "opacity-0"
                       )}
                     />
                     <div className="flex flex-col">
-                      <span>{airport.city} ({airport.code})</span>
-                      <span className="text-xs text-muted-foreground">{airport.name}, {airport.country}</span>
+                      <span>
+                        {airport.city} ({airport.code})
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {airport.regionName}, {airport.country}
+                      </span>
                     </div>
                   </CommandItem>
                 ))}

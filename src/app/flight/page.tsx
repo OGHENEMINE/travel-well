@@ -1,22 +1,14 @@
 "use client";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
-import axios from "axios";
-import Sidebar from "@/components/layout/Sidebar";
-import { ArrowsLeftRightIcon, MapPinIcon } from "@phosphor-icons/react";
+import { ArrowsLeftRightIcon } from "@phosphor-icons/react";
 import AirportComboBox from "@/components/common/AirportComboBox";
 import DateRangePicker from "@/components/common/DateRangePicker";
 import TravelClassSelector from "@/components/common/TravelClassSelector";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import DatePicker from "@/components/common/DatePicker";
-
-interface Airport {
-  code: string;
-  name: string;
-  city: string;
-  country: string;
-}
+import FlightCard from "@/components/common/FlightCard";
+import { Airport } from "@/components/common/AirportComboBox";
+import { searchFlight } from "./action";
 
 interface FlightFormData {
   origin?: Airport;
@@ -42,7 +34,11 @@ const Flight = () => {
     e.preventDefault();
 
     // Validate form data
-    if (!formData.origin || !formData.destination || !formData.dateRange?.from) {
+    if (
+      !formData.origin ||
+      !formData.destination ||
+      !formData.dateRange?.from
+    ) {
       setError("Please fill in all required fields");
       return;
     }
@@ -52,8 +48,8 @@ const Flight = () => {
     setSuccess(false);
 
     try {
-      // This is a mock API call - replace with your actual API endpoint
-      const response = await axios.post("/api/flight-search", formData);
+      
+      const response = await searchFlight(formData.origin.id, formData.destination.id, formData.travelClass);
       console.log("Search results:", response.data);
       setSuccess(true);
     } catch (error) {
@@ -65,17 +61,15 @@ const Flight = () => {
   };
 
   const swapAirports = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       origin: prev.destination,
-      destination: prev.origin
+      destination: prev.origin,
     }));
   };
 
   return (
-    <div className="flex py-10 gap-16">
-      <Sidebar />
-
+    <div>
       <div className="bg-white shadow rounded-md w-full h-fit p-6">
         <h2 className="text-xl text-black font-semibold mb-5">Flight Search</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -86,13 +80,15 @@ const Flight = () => {
                 <AirportComboBox
                   placeholder="From"
                   value={formData.origin}
-                  onSelect={(airport) => setFormData(prev => ({ ...prev, origin: airport }))}
+                  onSelect={(airport) =>
+                    setFormData((prev) => ({ ...prev, origin: airport }))
+                  }
                 />
               </div>
-              <Button 
-                type="button" 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
                 onClick={swapAirports}
                 className="rounded-full"
               >
@@ -102,7 +98,9 @@ const Flight = () => {
                 <AirportComboBox
                   placeholder="To"
                   value={formData.destination}
-                  onSelect={(airport) => setFormData(prev => ({ ...prev, destination: airport }))}
+                  onSelect={(airport) =>
+                    setFormData((prev) => ({ ...prev, destination: airport }))
+                  }
                 />
               </div>
             </div>
@@ -111,24 +109,24 @@ const Flight = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="mb-2 font-medium">Departure & Return:</p>
-              <DateRangePicker 
-                onSelect={(dateRange) => setFormData(prev => ({ ...prev, dateRange }))}
+              <DateRangePicker
+                onSelect={(dateRange) =>
+                  setFormData((prev) => ({ ...prev, dateRange }))
+                }
               />
             </div>
             <div>
               <p className="mb-2 font-medium">Passengers & Class:</p>
-              <TravelClassSelector 
-                onSelect={({ passengers, travelClass }) => 
-                  setFormData(prev => ({ ...prev, passengers, travelClass }))
+              <TravelClassSelector
+                onSelect={({ passengers, travelClass }) =>
+                  setFormData((prev) => ({ ...prev, passengers, travelClass }))
                 }
               />
             </div>
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-md">
-              {error}
-            </div>
+            <div className="bg-red-50 text-red-600 p-3 rounded-md">{error}</div>
           )}
 
           {success && (
@@ -137,14 +135,13 @@ const Flight = () => {
             </div>
           )}
 
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Searching..." : "Search Flights"}
           </Button>
         </form>
+      </div>
+      <div className="mt-6">
+        <FlightCard />
       </div>
     </div>
   );

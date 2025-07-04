@@ -1,8 +1,8 @@
-import React from "react";
 import { Button } from "../ui/button";
 import {
   FilmSlateIcon,
   ForkKnifeIcon,
+  PlusIcon,
   SuitcaseRollingIcon,
   UsbIcon,
   X,
@@ -15,8 +15,21 @@ import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 
-const FlightCard = () => {
-
+const FlightCard = ({
+  airline = "American Airlines",
+  price = 123450.0,
+  flightClass = "First class",
+  buttonType = "add",
+  departure,
+  returnDate,
+}: {
+  airline?: string;
+  price: number;
+  flightClass: string;
+  buttonType: string;
+  departure?: string;
+  returnDate?: string;
+}) => {
   return (
     <Card className="w-full border-none shadow-none rounded-md p-0 mt-6">
       <CardContent className="p-0 flex items-stretch">
@@ -31,11 +44,13 @@ const FlightCard = () => {
                 alt="american airline logo"
               />
               <div className="space-y-1">
-                <p className="text-xl font-bold">American Airlines</p>
+                <p className="text-xl font-bold">{airline}</p>
                 <div className="flex items-center gap-2">
                   <p className="text-muted font-medium text-sm">AA-829</p>
                   <span> &bull; </span>
-                  <Button className="bg-[#0A369D]">First class</Button>
+                  <span className="bg-[#0A369D] text-white p-1 px-2 rounded-sm text-sm">
+                    {flightClass}
+                  </span>
                 </div>
               </div>
             </div>
@@ -74,7 +89,7 @@ const FlightCard = () => {
               </div>
             </div>
 
-            <p className="text-xl font-bold">123,450.00</p>
+            <p className="text-xl font-bold">{price}</p>
           </div>
           {/* FLIGHT OFFERS */}
           <div className="flex items-center gap-3 text-muted font-medium text-sm px-4 py-6 ">
@@ -106,8 +121,18 @@ const FlightCard = () => {
         </div>
 
         {/* CANCEL BUTTON */}
-        <Button className="h-auto w-10 rounded-none text-destructive bg-destructive/10 hover:bg-destructive hover:text-white cursor-pointer">
-          <X size={32} />
+        <Button
+          className={`h-auto w-10 rounded-none cursor-pointer ${
+            buttonType === "add"
+              ? "bg-primary text-white"
+              : "text-destructive bg-destructive/10 hover:bg-destructive hover:text-white"
+          }`}
+        >
+          {buttonType === "add" ? (
+            <PlusIcon size={32} />
+          ) : (
+            <X size={32} />
+          )}
         </Button>
       </CardContent>
     </Card>
