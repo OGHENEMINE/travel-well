@@ -1,10 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const ProfileAvatar = ({ fallback, className }: { fallback: string, className:string }) => {
+const ProfileAvatar = ({
+  fallback="CN",
+  src="",
+  className,
+}: {
+  fallback?: string;
+  src?: string;
+  className: string;
+}) => {
   return (
     <Avatar className={`${className}`}>
-      <AvatarImage src="https://github.com/shadcn.png" />
-      <AvatarFallback>{fallback}</AvatarFallback>
+      <AvatarImage src={src} />
+      <AvatarFallback className="bg-transparent">{fallback}</AvatarFallback>
     </Avatar>
   );
 };

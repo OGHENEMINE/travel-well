@@ -1,9 +1,7 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { DateRange } from "react-day-picker";
 import axios from "axios";
-import Sidebar from "@/components/layout/Sidebar";
 import CityComboBox from "@/components/common/CityComboBox";
 import DateRangePicker from "@/components/common/DateRangePicker";
 import RoomTypeSelector from "@/components/common/RoomTypeSelector";
@@ -61,10 +59,7 @@ const Hotel = () => {
   };
 
   return (
-    <div className="flex py-10 gap-16">
-      <Sidebar />
-
-      <div className="bg-white shadow rounded-md w-full h-fit p-6">
+     <div className="bg-white shadow rounded-md w-full h-fit p-6">
         <h2 className="text-xl text-black font-semibold mb-5">Hotel Search</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div>
@@ -122,7 +117,6 @@ const Hotel = () => {
           </Button>
         </form>
       </div>
-    </div>
   );
 };
 

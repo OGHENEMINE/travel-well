@@ -141,7 +141,7 @@ const Flight = () => {
         </form>
       </div>
       <div className="mt-6">
-        <FlightCard />
+        <FlightCard buttonType="add"/>
       </div>
     </div>
   );
