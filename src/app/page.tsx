@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Home = () => {
   return (
@@ -107,9 +108,9 @@ const Home = () => {
               </span>
               Flights
             </p>
-            <Button className="text-primary bg-white font-bold hover:text-white cursor-pointer">
+            <Link href="/flight" className="text-primary bg-white font-bold hover:bg-primary hover:text-white cursor-pointer p-3 rounded-md text-sm">
               Add Flights
-            </Button>
+            </Link>
           </div>
           <FlightCard />
         </div>

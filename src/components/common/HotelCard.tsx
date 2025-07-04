@@ -1,16 +1,15 @@
 import { Card } from "../ui/card";
 import {
-  BedIcon,
-  CalendarBlankIcon,
-  MapPinIcon,
-  StarIcon,
-  SwimmingPoolIcon,
-  WineIcon,
-  X,
+    BedIcon,
+    CalendarBlankIcon,
+    MapPinIcon, SwimmingPoolIcon,
+    WineIcon,
+    X
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ImageCarousel } from "./ImageCarousel";
+import { Star } from "lucide-react";
 
 const HotelCard = () => {
   return (
@@ -24,7 +23,7 @@ const HotelCard = () => {
         {/* Content Section */}
         <div className="flex-1 flex ">
           <div className="divide-y flex-1">
-            <div className="flex-1 flex justify-between pr-4 py-4">
+            <div className="flex-1 flex justify-between gap-3 pr-4 py-4">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-0.5">
                   Riviera Resort, Lekki
@@ -38,7 +37,10 @@ const HotelCard = () => {
                     <MapPinIcon size={24} /> <span>Show in map</span>
                   </button>
                   <div className="flex items-center gap-1">
-                    <StarIcon className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <Star
+                      size={20}
+                      className="fill-yellow-400 text-yellow-400"
+                    />
                     <span className="text-sm font-medium">8.5</span>
                     <span className="text-sm">(436)</span>
                   </div>

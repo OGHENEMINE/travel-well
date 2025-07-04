@@ -2,13 +2,13 @@
 import { Card, CardContent, CardFooter } from "../ui/card";
 import ProfileAvatar from "../common/ProfileAvatar";
 import {
-  AirplaneTiltIcon,
-  BuildingsIcon,
+  AirplaneTiltIcon, BuildingsIcon,
   FirstAidKitIcon,
   NewspaperClippingIcon,
   RoadHorizonIcon,
   StudentIcon,
   SuitcaseRollingIcon,
+  CaretUpDownIcon
 } from "@phosphor-icons/react";
 import { PackageIcon } from "lucide-react";
 import Link from "next/link";
@@ -73,6 +73,7 @@ const Sidebar = () => {
           <div className="flex items-center gap-2 text-sm bg-neutral-100 rounded-md px-3.5 py-3">
             <ProfileAvatar fallback="CN" className="rounded-md w-12 h-12" />
             <span>Personal Account</span>
+            <CaretUpDownIcon size={24}/>
           </div>
         </CardFooter>
       </Card>

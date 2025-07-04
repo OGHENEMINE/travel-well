@@ -16,6 +16,7 @@ import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 
 const FlightCard = () => {
+
   return (
     <Card className="w-full border-none shadow-none rounded-md p-0 mt-6">
       <CardContent className="p-0 flex items-stretch">
