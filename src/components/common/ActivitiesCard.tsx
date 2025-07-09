@@ -1,20 +1,37 @@
 import { Card } from "../ui/card";
-import {
-    Clock,
-    MapPinIcon, X
-} from "@phosphor-icons/react";
+import { ClockClockwiseIcon, MapPinIcon, XIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ImageCarousel } from "./ImageCarousel";
 import { Star } from "lucide-react";
 
-const ActivitiesCard = () => {
+const ActivitiesCard = ({
+  name,
+  image,
+  price,
+  currency,
+  rating,
+  reviewCount,
+  buttonType = "add",
+  onRemove,
+  onAdd
+}: {
+  name: string;
+  image: string;
+  price: number;
+  currency: string;
+  rating: number;
+  reviewCount: string;
+  buttonType: string;
+  onRemove: () => void;
+  onAdd?: () => void;
+}) => {
   return (
     <Card className="shadow-none p-0 border-none mt-6 rounded-sm text-muted">
       <div className="flex items-center flex-col md:flex-row gap-2">
         {/* Image Section */}
         <div className="relative ">
-          <ImageCarousel images={["/hotel.png", "/hotel.png", "/hotel.png"]} />
+          <ImageCarousel images={[image, image, image]} />
         </div>
 
         {/* Content Section */}
@@ -23,7 +40,7 @@ const ActivitiesCard = () => {
             <div className="flex-1 flex gap-3 justify-between pr-4 py-4">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-0.5">
-                  The Museum of Modern Art
+                  {name}
                 </h2>
                 <p className="font-medium flex items-start gap-1 text-sm mb-3">
                   Works from Van Gogh to Warhol & beyond plus a sculpture
@@ -38,11 +55,12 @@ const ActivitiesCard = () => {
                       size={20}
                       className="fill-yellow-400 text-yellow-400"
                     />
-
-                    <span className="text-sm font-medium">4.5 (436)</span>
+                    <span className="text-sm font-medium">
+                      {rating}({reviewCount})
+                    </span>
                   </div>
                   <p className="flex items-center gap-1 text-sm font-medium">
-                    <Clock size={20} />
+                    <ClockClockwiseIcon size={20} />
                     <span>1 Hour</span>
                   </p>
                 </div>
@@ -51,14 +69,11 @@ const ActivitiesCard = () => {
               {/* Price Section */}
               <div>
                 <div className="text-2xl font-bold text-gray-900 mb-1 text-nowrap">
-                  ₦ 123,450.00
+                  {currency}
+                  {price}
                 </div>
-                <div className="text-sm mb-1">
-                  Total Price: NGN 560,000
-                </div>
-                <div className="text-xs">
-                  1 room x 10 nights incl. taxes
-                </div>
+                <div className="text-sm mb-1">Total Price: NGN 560,000</div>
+                <div className="text-xs">1 room x 10 nights incl. taxes</div>
               </div>
             </div>
 
@@ -83,8 +98,15 @@ const ActivitiesCard = () => {
               <Link href="#">Edit details</Link>
             </div>
           </div>
-          <Button className="h-auto w-10 rounded-none text-destructive bg-destructive/10 hover:bg-destructive hover:text-white cursor-pointer">
-            <X size={32} />
+          <Button
+            onClick={buttonType === "cancel" ? onRemove : onAdd}
+            className={`h-auto w-10 rounded-none  cursor-pointer ${
+              buttonType === "cancel"
+                ? "text-destructive bg-destructive/10 hover:bg-destructive hover:text-white"
+                : "text-white bg-primary"
+            }`}
+          >
+            <XIcon size={32} />
           </Button>
         </div>
       </div>

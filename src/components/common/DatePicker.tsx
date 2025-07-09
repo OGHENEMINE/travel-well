@@ -1,46 +1,76 @@
-import { ChevronDownIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { useState } from "react";
-import { CalendarBlankIcon, CaretUpDownIcon } from "@phosphor-icons/react";
-import { Calendar } from "../ui/calendar";
+"use client";
 
-const DatePicker = () => {
+import { useState } from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { CalendarBlankIcon } from "@phosphor-icons/react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+interface SingleDatePickerProps {
+  className?: string;
+  onSelect?: (date: Date | undefined) => void;
+}
+
+const SingleDatePicker = ({ className, onSelect }: SingleDatePickerProps) => {
+  const [date, setDate] = useState<Date | undefined>();
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+
+  const handleSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    if (onSelect) {
+      onSelect(selectedDate);
+    }
+    if (selectedDate) {
+      setOpen(false);
+    }
+  };
+
   return (
-    <div className="flex items-center gap-2 border border-neutral-200 p-2 rounded-md">
+    <div
+      className={cn(
+        "flex items-center gap-2 border border-neutral-200 p-2 rounded-md",
+        className
+      )}
+    >
       <CalendarBlankIcon size={30} />
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            id="single-date"
             variant="outline"
-            id="date"
-            className="w-48 justify-between font-normal"
+            className="w-full justify-start text-left font-normal border-none shadow-none"
           >
-            {date ? date.toLocaleDateString() : "Select date"}
-            <ChevronDownIcon />
+            <div className="flex flex-col">
+              {date ? (
+                <span className="font-medium">
+                  {format(date, "MMM d, yyyy")}
+                </span>
+              ) : (
+                <span>Select date</span>
+              )}
+            </div>
+            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
             selected={date}
+            onSelect={handleSelect}
             captionLayout="dropdown"
-            onSelect={(date) => {
-              setDate(date);
-              setOpen(false);
-            }}
           />
         </PopoverContent>
       </Popover>
-      <CaretUpDownIcon size={30} />
     </div>
   );
 };
 
-export default DatePicker;
+export default SingleDatePicker;

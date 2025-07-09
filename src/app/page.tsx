@@ -2,7 +2,6 @@
 import ActivitiesCard from "@/components/common/ActivitiesCard";
 import FlightCard from "@/components/common/FlightCard";
 import HotelCard from "@/components/common/HotelCard";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   AirplaneInFlightIcon,
@@ -18,6 +17,7 @@ import { useSavedItemsStore } from "@/store/useSavedItemsStore";
 const Home = () => {
   const savedFlights = useSavedItemsStore((s) => s.flights);
   const savedHotels = useSavedItemsStore((s) => s.hotels);
+  const savedActivities = useSavedItemsStore((s) => s.activities);
 
   return (
     <div className="flex-1 bg-white rounded-md p-4 lg:p-8">
@@ -69,7 +69,7 @@ const Home = () => {
           </CardContent>
           <CardFooter className="p-0 mt-3">
             <Link
-              href="/flight"
+              href="/activity"
               className="bg-primary w-full p-2 rounded-md text-center text-xs sm:text-sm font-medium"
             >
               Add Activities
@@ -220,14 +220,35 @@ const Home = () => {
             <span>Activities</span>
           </p>
           <Link
-            href="/activities"
+            href="/activity"
             className="bg-white text-primary p-2 rounded-md text-xs sm:text-sm font-medium self-start sm:self-auto"
           >
             Add Activities
           </Link>
         </div>
-        <div className="mt-4">
-          <ActivitiesCard />
+        {savedActivities.length === 0 && (
+          <p className="text-gray-300 text-sm">No saved activities.</p>
+        )}
+        <div className="space-y-3 mt-4">
+          {savedActivities.map((a) => {
+            const activity = a.data;
+            const p = activity;
+            return (
+              <ActivitiesCard
+                key={a.id}
+                name={p.name}
+                image={p.primaryPhoto.small || []}
+                price={p.priceBreakdown?.grossPrice?.value || 0}
+                currency={p.priceBreakdown?.grossPrice?.currency || ""}
+                rating={p.combinedNumericStats.average}
+                reviewCount={p.combinedNumericStats.total}
+                buttonType="cancel"
+                onRemove={() =>
+                  useSavedItemsStore.getState().removeActivity(a.id)
+                }
+              />
+            );
+          })}
         </div>
       </div>
     </div>
