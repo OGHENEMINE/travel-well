@@ -6,13 +6,18 @@ import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   AirplaneInFlightIcon,
   CalendarBlankIcon,
+  DotsThreeIcon,
+  GearIcon,
   RoadHorizonIcon,
+  UserPlusIcon,
   WarehouseIcon,
 } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSavedItemsStore } from "@/store/useSavedItemsStore";
+import { Button } from "@/components/ui/button";
+import ProfileAvatar from "@/components/common/ProfileAvatar";
 
 const Home = () => {
   const savedFlights = useSavedItemsStore((s) => s.flights);
@@ -34,27 +39,53 @@ const Home = () => {
       {/* TRIP INFO */}
       <div>
         {/* TRIP TIMELINE */}
-        <div className="flex w-fit items-center text-xs sm:text-sm gap-1 font-bold mt-4 lg:mt-5 py-2 px-3 bg-[#fef4e6] text-[#7a4504] rounded-md">
-          <span>
-            <CalendarBlankIcon size={16} className="sm:w-5 sm:h-5" />
-          </span>
-          <span>21 March 2024</span>
-          <span>
-            <ArrowRight size={16} className="sm:w-5 sm:h-5" />
-          </span>
-          <span>21 April 2024</span>
+        <div className="flex justify-between mt-4 lg:mt-5 ">
+          <div>
+            <div className="flex w-fit items-center text-xs sm:text-sm gap-1 font-bold py-2 px-3 bg-[#fef4e6] text-[#7a4504] rounded-md">
+              <span>
+                <CalendarBlankIcon size={16} className="sm:w-5 sm:h-5" />
+              </span>
+              <span>21 March 2024</span>
+              <span>
+                <ArrowRight size={16} className="sm:w-5 sm:h-5" />
+              </span>
+              <span>21 April 2024</span>
+            </div>
+            {/* TRIP NAME */}
+            <h2 className="font-semibold text-xl sm:text-2xl py-2 text-black">
+              Bahamas Family Trip
+            </h2>
+            {/* TRIP LOCATION / TYPE */}
+            <p className="flex flex-col sm:flex-row sm:items-center sm:divide-x-2 sm:divide-neutral-300 font-medium text-sm">
+              <span className="sm:pr-2">
+                New York, United States of America
+              </span>
+              <span className="sm:pl-2">Solo Trip</span>
+            </p>
+          </div>
+          <div className="font-bold">
+            <Button
+              variant="ghost"
+              className="cursor-pointer bg-primary/10 w-28 py-2 text-primary"
+            >
+              <UserPlusIcon size={24} />
+            </Button>
+            <Button className="cursor-pointer" variant="ghost">
+              <DotsThreeIcon size={24} />
+            </Button>
+
+            <div className="flex items-center max-w-32 mt-5">
+              <ProfileAvatar
+                className="w-12 h-12 rounded-full"
+                src="https://github.com/leerob.png"
+              />
+              <span className="h-0.5 bg-primary/10 w-full inline-block"></span>
+              <Button className="cursor-pointer hover:text-white border-2 border-primary/10 rounded-full bg-transparent text-black w-12 h-12">
+                <GearIcon size={24} />
+              </Button>
+            </div>
+          </div>
         </div>
-
-        {/* TRIP NAME */}
-        <h2 className="font-semibold text-xl sm:text-2xl py-2 text-black">
-          Bahamas Family Trip
-        </h2>
-
-        {/* TRIP LOCATION / TYPE */}
-        <p className="flex flex-col sm:flex-row sm:items-center sm:divide-x-2 sm:divide-neutral-300 font-medium text-sm">
-          <span className="sm:pr-2">New York, United States of America</span>
-          <span className="sm:pl-2">Solo Trip</span>
-        </p>
       </div>
 
       {/* TRIP PLANNER */}

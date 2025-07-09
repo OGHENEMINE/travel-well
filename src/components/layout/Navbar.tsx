@@ -14,11 +14,15 @@ import {
   ListChecksIcon,
   ListIcon,
   XIcon,
+  CaretDownIcon,
 } from "@phosphor-icons/react";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import ProfileAvatar from "../common/ProfileAvatar";
+import { Dropdown } from "../common/DropdownMenu";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 
 const Navbar = () => {
   const PATH = usePathname();
@@ -133,6 +137,22 @@ const Navbar = () => {
                 </span>
                 <span>Create</span>
               </Link>
+              <div className="flex items-center hover:text-black">
+                <Dropdown
+                  trigger={
+                    <div className="flex items-center gap-2">
+                      <ProfileAvatar
+                        className="w-10 h-10 rounded-full"
+                        src="https://github.com/leerob.png"
+                      />
+                      <CaretDownIcon className="" size={16} />
+                    </div>
+                  }
+                >
+                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  <DropdownMenuItem>Log out</DropdownMenuItem>
+                </Dropdown>
+              </div>
             </ul>
           </div>
         </div>
